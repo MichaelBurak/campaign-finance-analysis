@@ -36,3 +36,10 @@ df.head(2)
 allwin = df[df.winner == 'Y']
 swin = winners[winners.can_off == "S"]
 hwin = winners[winners.can_off == "H"]
+
+#expenses net of winning campaigns
+allwexpense = allwin['net_ope_exp']
+swexpense = swin['net_ope_exp']
+hwexpense = hwin['net_ope_exp']
+
+#plot out s and h then all in max, mean and median expenses 
