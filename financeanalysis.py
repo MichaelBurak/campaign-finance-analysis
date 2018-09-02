@@ -54,11 +54,26 @@ df['winner'] = df['winner'].fillna('N')
 
 
 #Logistic regression modeling 
-X = df['net_con']
-Y = df['winner']
+X = df['net_con'].values
+y = df['winner'].values
 
-'''train test split, #feature scaling, fit regression to training set, 
-predict test set results, viz train and test results
+
+#train test split
+from sklearn.cross_validation import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+#feature scaling
+from sklearn.preprocessing import StandardScaler
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)
+
+
+''', #feature scaling, fit regression to training set, 
+predict test set results, viz train and test results'''
+
+
+'''
 
 Random forest modeling 
 from sklearn.ensemble import RandomForestRegressor
