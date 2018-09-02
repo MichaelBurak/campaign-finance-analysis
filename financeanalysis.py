@@ -62,6 +62,14 @@ df['cas_on_han_beg_of_per'] = pd.to_numeric(df['cas_on_han_beg_of_per'])
 #swexpense = swin['net_ope_exp']
 #hwexpense = hwin['net_ope_exp']
 
+#cash on hand for winning campaigns
+#allwexpense = allwin['cas_on_han_beg_of_per']
+#swexpense = swin['cas_on_han_beg_of_per']
+#hwexpense = hwin['cas_on_han_beg_of_per'] 
+
+#plots
+
+
 #Logistic regression modeling 
 X = df.iloc[:,[35, 37]].values
 y = df.iloc[:, 43].values
@@ -125,14 +133,16 @@ y_pred = classifier.predict(X_test)
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
+#viz train and test results
+
 # Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
 accuracies.mean() #.924
 accuracies.std() # .032
 
-#Gradient boosting modeling 
+#Gradient boosting modeling (Xgboost?)
 
-#Grid-search --> k folds cross validation model comparison 
+#Grid-search
 
 #Clustering and cluster visualiation
