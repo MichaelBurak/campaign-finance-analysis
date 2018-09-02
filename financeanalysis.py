@@ -3,7 +3,7 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 
-#base dataframe in pandas
+#importing dataset to base dataframe in pandas
 df = pd.read_csv('CandidateSummaryAction1.csv')
 
 #quick overview
@@ -34,12 +34,20 @@ df.head(2)
 
 #separating out winners
 allwin = df[df.winner == 'Y']
-swin = winners[winners.can_off == "S"]
-hwin = winners[winners.can_off == "H"]
+swin = allwin[allwin.can_off == "S"]
+hwin = allwin[allwin.can_off == "H"]
 
 #expenses net of winning campaigns
 allwexpense = allwin['net_ope_exp']
 swexpense = swin['net_ope_exp']
 hwexpense = hwin['net_ope_exp']
 
-#plot out s and h then all in max, mean and median expenses 
+#Linear regression modeling 
+
+#Random forest modeling 
+
+#Gradient boosting modeling 
+
+#Grid-search --> k folds cross validation model comparison 
+
+#Clustering and visualiation
