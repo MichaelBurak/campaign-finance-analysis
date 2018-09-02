@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 #importing dataset to base dataframe in pandas
 df = pd.read_csv('CandidateSummaryAction1.csv')
 
+contributions = df['net_con']
+nu_con = contributions.isnull().sum() #171 null values of net contributions
+
 #quick overview
 df.head(2)
 
@@ -30,24 +33,44 @@ df['ind_ite_con']=df['ind_ite_con'].str.replace("$","").str.replace(",","").str.
 df['ind_uni_con']=df['ind_uni_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 df['ind_con']=df['ind_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 
-df.head(2)
+#still 171 null values
+nu_con_2 = df['net_con'].isnull().sum()
 
-#separating out winners
-allwin = df[df.winner == 'Y']
-swin = allwin[allwin.can_off == "S"]
-hwin = allwin[allwin.can_off == "H"]
+#drop all rows where contributions are null
+df = df.dropna(subset = ['net_con'])
 
-#expenses net of winning campaigns
-allwexpense = allwin['net_ope_exp']
-swexpense = swin['net_ope_exp']
-hwexpense = hwin['net_ope_exp']
+#filling in NaN of non winners with N
+df['winner'] = df['winner'].fillna('N')
 
-#Linear regression modeling 
+#separating out winners for viz
+#allwin = df[df.winner == 'Y']
+#swin = allwin[allwin.can_off == "S"]
+#hwin = allwin[allwin.can_off == "H"]
 
-#Random forest modeling 
+#expenses net of winning campaigns fir vuz
+#allwexpense = allwin['net_ope_exp']
+#swexpense = swin['net_ope_exp']
+#hwexpense = hwin['net_ope_exp']
 
-#Gradient boosting modeling 
 
-#Grid-search --> k folds cross validation model comparison 
+#Logistic regression modeling 
+X = df['net_con']
+Y = df['winner']
 
-#Clustering and visualiation
+'''train test split, #feature scaling, fit regression to training set, 
+predict test set results, viz train and test results
+
+Random forest modeling 
+from sklearn.ensemble import RandomForestRegressor
+regressor = RandomForestRegressor(n_estimators = 300)
+regressor.fit(X, y)
+
+Predicting a new result with random forest regressor
+y_pred = regressor.predict(6.5)
+
+Gradient boosting modeling 
+
+Grid-search --> k folds cross validation model comparison 
+
+Clustering and cluster visualiation
+'''
