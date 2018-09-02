@@ -1,13 +1,16 @@
 #importing in libraries
 
+import numpy as np
 import pandas as pd 
 import matplotlib.pyplot as plt
 
 #importing dataset to base dataframe in pandas
 df = pd.read_csv('CandidateSummaryAction1.csv')
 
-contributions = df['net_con']
-nu_con = contributions.isnull().sum() #171 null values of net contributions
+cont = df['net_con']
+exp = df['net_ope_exp']
+nu_con = cont.isnull().sum() #171 null values of net contributions
+nu_exp = exp.isnull().sum() #149 null values
 
 #quick overview
 df.head(2)
@@ -33,14 +36,18 @@ df['ind_ite_con']=df['ind_ite_con'].str.replace("$","").str.replace(",","").str.
 df['ind_uni_con']=df['ind_uni_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 df['ind_con']=df['ind_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 
-#still 171 null values
+#checking - still 171 and 149 null values
 nu_con_2 = df['net_con'].isnull().sum()
+nu_exp_2 = df['net_ope_exp'].isnull().sum()
 
-#drop all rows where contributions are null
+#drop all rows where contributions or expenses are null
 df = df.dropna(subset = ['net_con'])
+df = df.dropna(subset = ['net_ope_exp'])
 
-#filling in NaN of non winners with N
+#filling in NaN of non winners with N and then turning  winner and net_con into numerical value
 df['winner'] = df['winner'].fillna('N')
+df['winner'] = df['winner'].eq('Y').mul(1)
+df['net_con'] = pd.to_numeric(df['net_con'])
 
 #separating out winners for viz
 #allwin = df[df.winner == 'Y']
@@ -52,29 +59,39 @@ df['winner'] = df['winner'].fillna('N')
 #swexpense = swin['net_ope_exp']
 #hwexpense = hwin['net_ope_exp']
 
-
 #Logistic regression modeling 
-X = df['net_con'].values
-y = df['winner'].values
-
+X = df.iloc[:,[37]].values
+y = df.iloc[:, 43].values
 
 #train test split
 from sklearn.cross_validation import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.4)
 
-#feature scaling
+
+
+# Feature Scaling
 from sklearn.preprocessing import StandardScaler
-sc_X = StandardScaler()
-X_train = sc_X.fit_transform(X_train)
-X_test = sc_X.transform(X_test)
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
 
 
-''', #feature scaling, fit regression to training set, 
-predict test set results, viz train and test results'''
+# Fitting Logistic Regression to the Training set
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression()
+classifier.fit(X_train, y_train)
 
 
-'''
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
 
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+cm
+
+'''viz train and test results
 Random forest modeling 
 from sklearn.ensemble import RandomForestRegressor
 regressor = RandomForestRegressor(n_estimators = 300)
