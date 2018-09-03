@@ -25,6 +25,8 @@ col = ['can_nam', 'can_str1', 'can_str2', 'can_cit', 'can_sta', 'can_zip']
 
 df.drop(col, axis=1, inplace=True)
 
+df.columns
+
 #clean up - add more comments on replacing $ + , + converting negatives to be readable
 df['tot_dis'] = df['net_ope_exp'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 df['net_ope_exp'] = df['net_ope_exp'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
@@ -52,6 +54,8 @@ df['winner'] = df['winner'].eq('Y').mul(1)
 df['net_con'] = pd.to_numeric(df['net_con'])
 df['cas_on_han_beg_of_per'] = pd.to_numeric(df['cas_on_han_beg_of_per'])
 
+df.head(2)
+df.info()
 
 #separating out winners for viz
 allwin = df[df.winner == 1]
@@ -113,6 +117,20 @@ from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
 acc = accuracies.mean() 
 accuracies.std() 
+
+'''
+# Applying Grid Search for hyperparams 
+from sklearn.model_selection import GridSearchCV
+parameters = [{'solver': ['liblinear','sag','saga'],  'C': [1, .75, .5,]}]
+grid_search = GridSearchCV(estimator = classifier,
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 10,
+                           n_jobs = -1)
+grid_search = grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_
+'''
 
 
 #viz train and test results
@@ -199,7 +217,5 @@ plt.ylabel('Mean of accuracies')
 plt.title('K-fold comparison across models')
  
 plt.show()
-
-#Grid-search
 
 #Clustering across geography and cluster visualiation?
