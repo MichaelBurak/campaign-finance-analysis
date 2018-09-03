@@ -82,7 +82,7 @@ X = df.iloc[:,[35, 37]].values
 y = df.iloc[:, 43].values
 
 #train test split
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.4)
 
 
@@ -138,25 +138,22 @@ best_parameters = grid_search.best_params_
 #Random forest classification modeling
 
 # Splitting the dataset into the Training set and Test set
-from sklearn.cross_validation import train_test_split
 X_train_rf, X_test_rf, y_train_rf, y_test_rf = train_test_split(X, y, test_size = 0.3)
 
 # Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
+#sc = StandardScaler()
 X_train_rf = sc.fit_transform(X_train_rf)
 X_test_rf = sc.transform(X_test_rf)
 
 # Fitting Random Forest Classification to the Training set
 from sklearn.ensemble import RandomForestClassifier
 classifier_rf = RandomForestClassifier(n_estimators = 10, criterion = 'entropy')
-classifier.fit(X_train_rf, y_train_rf)
+classifier_rf.fit(X_train_rf, y_train_rf)
 
 # Predicting the Test set results
-y_pred_rf = classifier.predict(X_test_rf)
+y_pred_rf = classifier_rf.predict(X_test_rf)
 
 # Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
 cm_rf = confusion_matrix(y_test_rf, y_pred_rf)
 
 #Viz matrix
@@ -165,8 +162,7 @@ sn.heatmap(cm_rf, annot=True,annot_kws={"size": 16})# font size
 
 
 # Applying k-Fold Cross Validation
-from sklearn.model_selection import cross_val_score
-accuracies_rf = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+accuracies_rf = cross_val_score(estimator = classifier_rf, X = X_train_rf, y = y_train_rf, cv = 10)
 acc_rf = accuracies_rf.mean() 
 accuracies_rf.std() 
 
@@ -176,7 +172,6 @@ accuracies_rf.std()
 #XGboost modeling
 
 # Splitting the dataset into the Training set and Test set
-from sklearn.model_selection import train_test_split
 X_train_xg, X_test_xg, y_train_xg, y_test_xg = train_test_split(X, y, test_size = 0.2)
 
 # Fitting XGBoost to the Training set
@@ -188,7 +183,6 @@ classifier_xg.fit(X_train_xg, y_train_xg)
 y_pred_xg = classifier.predict(X_test_xg)
 
 # Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
 cm_xg = confusion_matrix(y_test_xg, y_pred_xg)
 
 #Viz matrix
@@ -197,17 +191,16 @@ sn.heatmap(cm_xg, annot=True,annot_kws={"size": 16})# font size
 
 
 # Applying k-Fold Cross Validation
-from sklearn.model_selection import cross_val_score
 accuracies_xg = cross_val_score(estimator = classifier_xg, X = X_train_xg, y = y_train_xg, cv = 10)
 acc_xg = accuracies_xg.mean()
-accuracies.std()
+accuracies_xg.std()
 
 #viz train and test results
 
 #Viz all the acc off k-folds
 
-obj = ('Logistic', 'Random Forest', 'XGBoost')
-y_pos = np.arange(len(objects))
+obj = ['Logistic', 'Random Forest', 'XGBoost']
+y_pos = np.arange(len(obj))
 means = [acc, acc_rf, acc_xg]
 
  
