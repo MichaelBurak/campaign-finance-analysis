@@ -186,6 +186,20 @@ accuracies.std()
 
 #viz train and test results
 
+#Viz all the acc off k-folds
+
+obj = ('Logistic', 'Random Forest', 'XGBoost')
+y_pos = np.arange(len(objects))
+means = [acc, acc_rf, acc_xg]
+
+ 
+plt.bar(y_pos, means, align='center', alpha=0.5)
+plt.xticks(y_pos, obj)
+plt.ylabel('Mean of accuracies')
+plt.title('K-fold comparison across models')
+ 
+plt.show()
+
 #Grid-search
 
 #Clustering across geography and cluster visualiation?
