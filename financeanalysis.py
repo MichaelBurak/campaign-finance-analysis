@@ -83,7 +83,7 @@ y = df.iloc[:, 43].values
 
 #train test split
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
 
 
 
@@ -114,7 +114,7 @@ sn.heatmap(cm, annot=True,annot_kws={"size": 16})# font size
 
 # Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
-accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 3)
 acc = accuracies.mean() 
 accuracies.std() 
 
@@ -123,7 +123,7 @@ accuracies.std()
 #Random forest classification modeling
 
 # Splitting the dataset into the Training set and Test set
-X_train_rf, X_test_rf, y_train_rf, y_test_rf = train_test_split(X, y, test_size = 0.3)
+X_train_rf, X_test_rf, y_train_rf, y_test_rf = train_test_split(X, y, test_size = 0.2)
 
 # Feature Scaling
 #sc = StandardScaler()
@@ -147,7 +147,7 @@ sn.heatmap(cm_rf, annot=True,annot_kws={"size": 16})# font size
 
 
 # Applying k-Fold Cross Validation
-accuracies_rf = cross_val_score(estimator = classifier_rf, X = X_train_rf, y = y_train_rf, cv = 10)
+accuracies_rf = cross_val_score(estimator = classifier_rf, X = X_train_rf, y = y_train_rf, cv = 3)
 acc_rf = accuracies_rf.mean() 
 accuracies_rf.std() 
 
@@ -157,7 +157,7 @@ accuracies_rf.std()
 #XGboost modeling
 
 # Splitting the dataset into the Training set and Test set
-X_train_xg, X_test_xg, y_train_xg, y_test_xg = train_test_split(X, y, test_size = 0.3)
+X_train_xg, X_test_xg, y_train_xg, y_test_xg = train_test_split(X, y, test_size = 0.2)
 
 # Fitting XGBoost to the Training set
 from xgboost import XGBClassifier
@@ -176,7 +176,7 @@ sn.heatmap(cm_xg, annot=True,annot_kws={"size": 16})# font size
 
 
 # Applying k-Fold Cross Validation
-accuracies_xg = cross_val_score(estimator = classifier_xg, X = X_train_xg, y = y_train_xg, cv = 10)
+accuracies_xg = cross_val_score(estimator = classifier_xg, X = X_train_xg, y = y_train_xg, cv = 3)
 acc_xg = accuracies_xg.mean()
 accuracies_xg.std()
 
@@ -204,7 +204,7 @@ parameters = [{'booster': ['gbtree','dart'], 'gamma':['0','0.1','0.5','1','5']}]
 grid_search = GridSearchCV(estimator = classifier_xg,
                            param_grid = parameters,
                            scoring = 'accuracy',
-                           cv = 10,
+                           cv = 3,
                            n_jobs = -1)
 grid_search = grid_search.fit(X_train, y_train)
 best_accuracy = grid_search.best_score_
