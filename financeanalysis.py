@@ -10,8 +10,8 @@ df = pd.read_csv('CandidateSummaryAction1.csv')
 
 cont = df['net_con']
 cash = df['cas_on_han_beg_of_per']
-nu_con = cont.isnull().sum() #171 null values of net contributions
-nu_cash = cash.isnull().sum() #114 null values
+nu_con = cont.isnull().sum()
+nu_cash = cash.isnull().sum()
 
 #quick overview
 df.head(2)
@@ -54,19 +54,21 @@ df['cas_on_han_beg_of_per'] = pd.to_numeric(df['cas_on_han_beg_of_per'])
 
 
 #separating out winners for viz
-#allwin = df[df.winner == 'Y']
-#swin = allwin[allwin.can_off == "S"]
-#hwin = allwin[allwin.can_off == "H"]
+allwin = df[df.winner == 1]
+swin = allwin[allwin.can_off == "S"]
+hwin = allwin[allwin.can_off == "H"]
 
 #net contributions of winning campaigns fir vuz
-#allwcon = allwin['net_con']
-#swcon = swin['net_con']
-#hwcon = hwin['net_con']
+allwcon = allwin['net_con']
+swcon = swin['net_con']
+hwcon = hwin['net_con']
 
 #cash on hand for winning campaigns
-#allwexpense = allwin['cas_on_han_beg_of_per']
-#swexpense = swin['cas_on_han_beg_of_per']
-#hwexpense = hwin['cas_on_han_beg_of_per'] 
+allwcash = allwin['cas_on_han_beg_of_per']
+swcash = swin['cas_on_han_beg_of_per']
+hw = hwin['cas_on_han_beg_of_per'] 
+
+
 
 #plots and EDA 
 
@@ -186,4 +188,4 @@ accuracies.std()
 
 #Grid-search
 
-#Clustering and cluster visualiation
+#Clustering across geography and cluster visualiation?
