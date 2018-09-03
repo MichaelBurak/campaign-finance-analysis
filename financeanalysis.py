@@ -3,14 +3,15 @@
 import numpy as np
 import pandas as pd 
 import matplotlib.pyplot as plt
+import seaborn as sn
 
 #importing dataset to base dataframe in pandas
 df = pd.read_csv('CandidateSummaryAction1.csv')
 
 cont = df['net_con']
-exp = df['net_ope_exp']
+cash = df['cas_on_han_beg_of_per']
 nu_con = cont.isnull().sum() #171 null values of net contributions
-nu_exp = exp.isnull().sum() #149 null values
+nu_cash = cash.isnull().sum() #114 null values
 
 #quick overview
 df.head(2)
@@ -36,11 +37,11 @@ df['ind_ite_con']=df['ind_ite_con'].str.replace("$","").str.replace(",","").str.
 df['ind_uni_con']=df['ind_uni_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 df['ind_con']=df['ind_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 
-#checking - still 171 and 149 null values
-nu_con_2 = df['net_con'].isnull().sum()
-nu_exp_2 = df['net_ope_exp'].isnull().sum()
+#checking - still same null value sum
+nu_con_2 = cont.isnull().sum()
+nu_cash_2 = cash.isnull().sum()
 
-#drop all rows where contributions or expenses are null
+#drop all rows where contributions or cash on hand are null
 df = df.dropna(subset = ['net_con'])
 df = df.dropna(subset = ['cas_on_han_beg_of_per'])
 
@@ -100,11 +101,16 @@ y_pred = classifier.predict(X_test)
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
+#Viz matrix
+sn.set(font_scale=1.4)#for label size
+sn.heatmap(cm, annot=True,annot_kws={"size": 16})# font size
+
+
 # Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
-acc = accuracies.mean() #.68
-accuracies.std() #.067
+acc = accuracies.mean() 
+accuracies.std() 
 
 
 #viz train and test results
@@ -133,6 +139,11 @@ y_pred_rf = classifier.predict(X_test_rf)
 from sklearn.metrics import confusion_matrix
 cm_rf = confusion_matrix(y_test_rf, y_pred_rf)
 
+#Viz matrix
+sn.set(font_scale=1.4)#for label size
+sn.heatmap(cm_rf, annot=True,annot_kws={"size": 16})# font size
+
+
 # Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
 accuracies_rf = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
@@ -160,11 +171,18 @@ y_pred_xg = classifier.predict(X_test_xg)
 from sklearn.metrics import confusion_matrix
 cm_xg = confusion_matrix(y_test_xg, y_pred_xg)
 
+#Viz matrix
+sn.set(font_scale=1.4)#for label size
+sn.heatmap(cm_xg, annot=True,annot_kws={"size": 16})# font size
+
+
 # Applying k-Fold Cross Validation
 from sklearn.model_selection import cross_val_score
 accuracies_xg = cross_val_score(estimator = classifier_xg, X = X_train_xg, y = y_train_xg, cv = 10)
 acc_xg = accuracies_xg.mean()
 accuracies.std()
+
+#viz train and test results
 
 #Grid-search
 
