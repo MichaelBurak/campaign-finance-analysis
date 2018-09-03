@@ -83,7 +83,7 @@ y = df.iloc[:, 43].values
 
 #train test split
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.4)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3)
 
 
 
@@ -117,21 +117,6 @@ from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
 acc = accuracies.mean() 
 accuracies.std() 
-
-'''
-# Applying Grid Search for hyperparams 
-from sklearn.model_selection import GridSearchCV
-parameters = [{'solver': ['liblinear','sag','saga'],  'C': [1, .75, .5,]}]
-grid_search = GridSearchCV(estimator = classifier,
-                           param_grid = parameters,
-                           scoring = 'accuracy',
-                           cv = 10,
-                           n_jobs = -1)
-grid_search = grid_search.fit(X_train, y_train)
-best_accuracy = grid_search.best_score_
-best_parameters = grid_search.best_params_
-'''
-
 
 #viz train and test results
 
@@ -172,7 +157,7 @@ accuracies_rf.std()
 #XGboost modeling
 
 # Splitting the dataset into the Training set and Test set
-X_train_xg, X_test_xg, y_train_xg, y_test_xg = train_test_split(X, y, test_size = 0.2)
+X_train_xg, X_test_xg, y_train_xg, y_test_xg = train_test_split(X, y, test_size = 0.3)
 
 # Fitting XGBoost to the Training set
 from xgboost import XGBClassifier
@@ -211,4 +196,18 @@ plt.title('K-fold comparison across models')
  
 plt.show()
 
-#Clustering across geography and cluster visualiation?
+#Tuning XGBoost as most accurate model's hyperparams 
+
+# Applying Grid Search for hyperparams 
+from sklearn.model_selection import GridSearchCV
+parameters = [{'booster': ['gbtree','dart'], 'gamma':['0','0.1','0.5','1','5']}]
+grid_search = GridSearchCV(estimator = classifier_xg,
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 10,
+                           n_jobs = -1)
+grid_search = grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_
+
+#Gamma seems to vary based on sample from 0-5
