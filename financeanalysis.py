@@ -27,7 +27,7 @@ df.drop(col, axis=1, inplace=True)
 
 df.columns
 
-#clean up - add more comments on replacing $ + , + converting negatives to be readable
+#clean up - converts money values to 'float' as a string to be converted in dtype later.
 df['tot_dis'] = df['net_ope_exp'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 df['net_ope_exp'] = df['net_ope_exp'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
 df['net_con'] = df['net_con'].str.replace("$","").str.replace(",","").str.replace("(","-").str.replace(")","")
